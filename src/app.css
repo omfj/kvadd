@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@theme inline {
+	--color-background: var(--background);
+	--color-accent: var(--accent);
+}
+
+:root {
+	--background: #eef3f7;
+	--accent: #a855f7;
+}
+
+body {
+	font-family: 'Inter', sans-serif;
+	background-color: var(--color-background);
+}
