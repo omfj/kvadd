@@ -1,0 +1,1 @@
+ALTER TABLE `graphs` ADD `show_points` integer DEFAULT true NOT NULL;

@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ request, locals, params }) => {
 		const data = (await request.json()) as {
 			x: number;
 			y: number;
-			label?: string | null;
+			label: string | null;
 		};
 
 		if (!locals.db || !locals.session) {

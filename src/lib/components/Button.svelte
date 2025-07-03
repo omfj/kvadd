@@ -1,27 +1,19 @@
 <script lang="ts">
-	interface Props {
-		type?: 'button' | 'submit' | 'reset';
-		onclick?: (event: MouseEvent) => void;
-		class?: string;
-		children: any;
-	}
+	import { cn } from '$lib/cn';
+	import type { HTMLButtonAttributes } from 'svelte/elements';
 
-	let {
-		type = 'button',
-		onclick,
-		class: className = '',
-		children,
-		...restProps
-	}: Props = $props();
+	type Props = HTMLButtonAttributes;
 
-	const baseClasses = 'w-full bg-accent px-4 py-2 text-black hover:opacity-90 focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:outline-none';
+	let { class: className, children, type = 'button', ...rest }: Props = $props();
 </script>
 
 <button
 	{type}
-	{onclick}
-	class="{baseClasses} {className}"
-	{...restProps}
+	class={cn(
+		'bg-accent focus:ring-accent flex w-full items-center justify-center gap-2 px-4 py-2 text-center font-medium text-white hover:opacity-90 focus:ring-2 focus:ring-offset-2 focus:outline-none',
+		className
+	)}
+	{...rest}
 >
-	{@render children()}
+	{@render children?.()}
 </button>

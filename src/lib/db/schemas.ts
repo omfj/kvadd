@@ -8,12 +8,16 @@ export const graphs = table('graphs', {
 		.$defaultFn(() => nanoid()),
 	name: text().notNull(),
 	xLabel: text(),
+	x2Label: text(),
 	yLabel: text(),
+	y2Label: text(),
 	topEmoji: text(),
 	rightEmoji: text(),
 	bottomEmoji: text(),
 	leftEmoji: text(),
 	allowMultiplePoints: integer({ mode: 'boolean' }).notNull().default(true),
+	showPoints: integer({ mode: 'boolean' }).notNull().default(true),
+	createdAt: integer({ mode: 'timestamp' }).$defaultFn(() => new Date()),
 	sessionId: text()
 		.notNull()
 		.references(() => sessions.id, {
@@ -48,7 +52,8 @@ export const points = table('points', {
 		.notNull()
 		.references(() => sessions.id, {
 			onDelete: 'cascade'
-		})
+		}),
+	createdAt: integer({ mode: 'timestamp' }).$defaultFn(() => new Date())
 });
 
 export const pointsRelations = relations(points, ({ one }) => ({
@@ -62,10 +67,13 @@ export const pointsRelations = relations(points, ({ one }) => ({
 	})
 }));
 
+export type Point = InferSelectModel<typeof points>;
+
 export const sessions = table('sessions', {
 	id: text()
 		.primaryKey()
-		.$defaultFn(() => nanoid())
+		.$defaultFn(() => nanoid()),
+	createdAt: integer({ mode: 'timestamp' }).$defaultFn(() => new Date())
 });
 
 export const sessionsRelations = relations(sessions, ({ many }) => ({

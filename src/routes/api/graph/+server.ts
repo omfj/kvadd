@@ -7,12 +7,15 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		const data = (await request.json()) as {
 			name: string;
 			xLabel?: string | null;
+			x2Label?: string | null;
 			yLabel?: string | null;
+			y2Label?: string | null;
 			topEmoji?: string | null;
 			rightEmoji?: string | null;
 			bottomEmoji?: string | null;
 			leftEmoji?: string | null;
 			allowMultiplePoints?: boolean;
+			showPoints?: boolean;
 		};
 
 		if (!locals.db || !locals.session) {
@@ -26,12 +29,15 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		const graphData = {
 			name: data.name.trim(),
 			xLabel: data.xLabel || null,
+			x2Label: data.x2Label || null,
 			yLabel: data.yLabel || null,
+			y2Label: data.y2Label || null,
 			topEmoji: data.topEmoji || null,
 			rightEmoji: data.rightEmoji || null,
 			bottomEmoji: data.bottomEmoji || null,
 			leftEmoji: data.leftEmoji || null,
 			allowMultiplePoints: data.allowMultiplePoints ?? true,
+			showPoints: data.showPoints ?? true,
 			sessionId: locals.session
 		};
 

@@ -17,8 +17,16 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		error(404, 'Finner ikke en kvadd med den ID-en');
 	}
 
+	const { points, ...g } = graph;
+
+	const isOwner = graph.sessionId === locals.session;
+	const shouldSendDownPoints = graph.showPoints || isOwner;
+
+	const p = shouldSendDownPoints ? points : [];
+
 	return {
-		graph,
+		graph: g,
+		points: p,
 		sessionId: locals.session
 	};
 };
