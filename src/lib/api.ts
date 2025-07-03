@@ -118,8 +118,11 @@ export class GraphUpdateBroadcaster {
 	}
 
 	async broadcastToGraph(id: string) {
+		const url = new URL(this.#url);
+		url.pathname = `/graph/${id}`;
+
 		try {
-			await fetch(`${this.#url}/graph/${id}`, {
+			await fetch(url, {
 				method: 'POST',
 				credentials: 'include',
 				headers: {
