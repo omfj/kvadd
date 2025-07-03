@@ -11,6 +11,7 @@ declare global {
 		interface Locals {
 			db: import('$lib/db/drizzle').Database;
 			session: string;
+			graphUpdate: import('$lib/api').GraphUpdateBroadcaster;
 		}
 	}
 }

@@ -2,6 +2,7 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 	import type { Graph, Point } from '$lib/db/schemas';
 	import { cn } from '$lib/cn';
+	import { truncate } from '$lib/utils';
 
 	export type OnGraphClickParams = {
 		x: number;
@@ -138,7 +139,7 @@
 				class="absolute -translate-x-1/2 transform text-xs text-gray-700"
 				style="left: {xPos}%; top: {yPos + 2}%"
 			>
-				{point.label}
+				{truncate(point.label)}
 			</div>
 		{/if}
 	{/each}

@@ -107,3 +107,27 @@ export async function updateGraph(
 
 	return await response.json();
 }
+
+export class GraphUpdateBroadcaster {
+	#url: string;
+	#apiKey: string;
+
+	constructor(url: string, apiKey: string) {
+		this.#url = url;
+		this.#apiKey = apiKey;
+	}
+
+	async broadcastToGraph(id: string) {
+		try {
+			await fetch(`${this.#url}/graph/${id}`, {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					Authorization: `Bearer ${this.#apiKey}`
+				}
+			});
+		} catch {
+			console.error(`Failed to broadcast graph change for: ${id}`);
+		}
+	}
+}

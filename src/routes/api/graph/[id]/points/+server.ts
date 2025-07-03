@@ -37,19 +37,21 @@ export const POST: RequestHandler = async ({ request, locals, params }) => {
 		};
 
 		if (!locals.db || !locals.session) {
+			console.error('No session found');
 			return json({ error: 'Database or session not available' }, { status: 500 });
 		}
 
 		if (!params.id) {
+			console.error('Graph ID is required');
 			return json({ error: 'Graph ID is required' }, { status: 400 });
 		}
 
 		const graph = await locals.db.query.graphs.findFirst({
-			where: (graphs, { eq, and }) =>
-				and(eq(graphs.id, params.id), eq(graphs.sessionId, locals.session))
+			where: (graphs, { eq }) => eq(graphs.id, params.id)
 		});
 
 		if (!graph) {
+			console.error('No grah found');
 			return json({ error: 'Graph not found' }, { status: 404 });
 		}
 
@@ -60,6 +62,7 @@ export const POST: RequestHandler = async ({ request, locals, params }) => {
 			});
 
 			if (existingPoint) {
+				console.warn('User has already submitted a point');
 				return json(
 					{ error: 'Only one point allowed per session for this graph' },
 					{ status: 400 }
@@ -77,6 +80,10 @@ export const POST: RequestHandler = async ({ request, locals, params }) => {
 		};
 
 		const result = await locals.db.insert(points).values(pointData).returning();
+
+		await locals.graphUpdate.broadcastToGraph(params.id);
+
+		console.log(`Point submitted to graph: ${params.id}`);
 
 		return json({
 			success: true,

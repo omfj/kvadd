@@ -4,6 +4,7 @@
 	import { cn } from '$lib/cn.js';
 	import Graph, { type OnGraphClickParams } from '$lib/components/Graph.svelte';
 	import GraphAdmin from './_components/GraphAdmin.svelte';
+	import { onMount, onDestroy } from 'svelte';
 
 	let { data } = $props();
 	let graph = $derived(data.graph);
@@ -16,6 +17,23 @@
 			return false;
 		}
 		return !isCreatingPoint;
+	});
+
+	let ws = $state<WebSocket | null>(null);
+
+	onMount(() => {
+		ws = new WebSocket(`${data.wsUrl}/graph/${graph.id}?session=${data.sessionId}`);
+
+		ws.onmessage = (event) => {
+			const message = event.data;
+			if (message === 'UPDATE') {
+				invalidateAll();
+			}
+		};
+	});
+
+	onDestroy(() => {
+		ws?.close();
 	});
 
 	async function handleGraphClick({ x, y }: OnGraphClickParams) {

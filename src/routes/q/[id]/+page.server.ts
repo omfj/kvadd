@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ params, locals, platform }) => {
 	if (!params.id) {
 		error(404, 'Finner ikke en kvadd med den ID-en');
 	}
@@ -27,6 +27,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	return {
 		graph: g,
 		points: p,
-		sessionId: locals.session
+		sessionId: locals.session,
+		wsUrl: platform!.env.WS_URL
 	};
 };

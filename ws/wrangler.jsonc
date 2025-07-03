@@ -4,23 +4,34 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "kvadda",
-	"main": ".svelte-kit/cloudflare/_worker.js",
-	"compatibility_date": "2025-07-02",
+	"name": "ws",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-07-03",
 	"assets": {
 		"binding": "ASSETS",
-		"directory": ".svelte-kit/cloudflare"
+		"directory": "./public"
 	},
 	"observability": {
 		"enabled": true
 	},
-	"vars": {
-		"WS_URL": "wss://ws.kvadd.omfj.no"
-	},
 	"routes": [
 		{
-			"pattern": "kvadd.omfj.no",
+			"pattern": "ws.kvadd.omfj.no",
 			"custom_domain": true
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "WEBSOCKET_ROOM",
+				"class_name": "WebSocketRoom"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_classes": ["WebSocketRoom"]
 		}
 	],
 	"d1_databases": [
@@ -28,8 +39,8 @@
 			"binding": "DB",
 			"database_name": "kvadda-db",
 			"database_id": "d091e31c-ca47-43ac-9e0e-d7bdc12ef9bb",
-			"migrations_dir": "./drizzle",
-			"migrations_table": "__drizzle_migrations"
+			"migrations_dir": "../drizzle",
+			"migrations_table": "../__drizzle_migrations"
 		}
 	]
 }

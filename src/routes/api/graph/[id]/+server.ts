@@ -12,11 +12,13 @@ export const PATCH: RequestHandler = async ({ request, locals, params }) => {
 		};
 
 		if (!locals.db || !locals.session) {
+			console.error('No session found');
 			return json({ error: 'Database or session not available' }, { status: 500 });
 		}
 
 		const graphId = params.id;
 		if (!graphId) {
+			console.error('Graph id is required');
 			return json({ error: 'Graph ID is required' }, { status: 400 });
 		}
 
@@ -24,6 +26,7 @@ export const PATCH: RequestHandler = async ({ request, locals, params }) => {
 		const updateData: any = {};
 		if (data.name !== undefined) {
 			if (!data.name.trim()) {
+				console.error('Graph data cant be empty');
 				return json({ error: 'Graph name cannot be empty' }, { status: 400 });
 			}
 			updateData.name = data.name.trim();
@@ -42,8 +45,11 @@ export const PATCH: RequestHandler = async ({ request, locals, params }) => {
 			.returning();
 
 		if (result.length === 0) {
+			console.error('Failed to create graph');
 			return json({ error: 'Graph not found' }, { status: 404 });
 		}
+
+		await locals.graphUpdate.broadcastToGraph(params.id);
 
 		return json({
 			success: true,
